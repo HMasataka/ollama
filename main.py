@@ -2,6 +2,7 @@
 # /// script
 # requires-python = ">=3.12"
 # dependencies = [
+#     "langchain>=1.2.0",
 #     "langchain-core>=1.2.14",
 #     "langchain-ollama>=1.0.1",
 #     "langgraph>=1.0.9",
@@ -14,7 +15,7 @@ import subprocess
 from langchain_core.messages import HumanMessage
 from langchain_core.tools import tool
 from langchain_ollama import ChatOllama
-from langgraph.prebuilt import create_react_agent
+from langchain.agents import create_agent
 
 WORK_DIR = os.getcwd()
 
@@ -66,11 +67,9 @@ def run_command(command: str) -> str:
 
 def main():
     llm = ChatOllama(model="qwen3", temperature=0)
-    agent = create_react_agent(
+    agent = create_agent(
         model=llm,
         tools=[write_file, read_file, list_files, run_command],
-        prompt=f"あなたはファイル操作アシスタントです。作業ディレクトリは {WORK_DIR} です。"
-        "ファイルパスは相対パスで扱ってください。",
     )
 
     print(f"AI Assistant ({WORK_DIR})")
