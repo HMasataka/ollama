@@ -6,12 +6,14 @@
 #     "langchain-core>=1.2.14",
 #     "langchain-ollama>=1.0.1",
 #     "langgraph>=1.0.9",
+#     "duckduckgo-search>=7.0.0",
 # ]
 # ///
 """ai - カレントディレクトリで動くAIアシスタント"""
 import os
 import subprocess
 
+from duckduckgo_search import DDGS
 from langchain_core.messages import HumanMessage
 from langchain_core.tools import tool
 from langchain_ollama import ChatOllama
@@ -65,11 +67,23 @@ def run_command(command: str) -> str:
     return output if output else "(no output)"
 
 
+@tool
+def web_search(query: str, max_results: int = 5) -> str:
+    """Web検索を実行して結果を返す。最新情報や知らないことを調べるときに使う。"""
+    results = DDGS().text(query, max_results=max_results)
+    if not results:
+        return "検索結果が見つかりませんでした。"
+    lines = []
+    for r in results:
+        lines.append(f"**{r['title']}**\n{r['body']}\n{r['href']}\n")
+    return "\n".join(lines)
+
+
 def main():
     llm = ChatOllama(model="qwen3", temperature=0)
     agent = create_agent(
         model=llm,
-        tools=[write_file, read_file, list_files, run_command],
+        tools=[write_file, read_file, list_files, run_command, web_search],
     )
 
     print(f"AI Assistant ({WORK_DIR})")
