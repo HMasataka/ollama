@@ -20,13 +20,13 @@ uv sync
 
 ```bash
 # カレントディレクトリで起動
-uv run ai
+uv run main.py
 
 # 任意のディレクトリで起動
-cd ~/projects/my-app && uv run --project /path/to/this/repo ai
+cp main.py ~/.local/bin/ai
 ```
 
-```
+```text
 AI Assistant (/Users/you/projects/my-app)
 Type 'exit' to quit.
 
