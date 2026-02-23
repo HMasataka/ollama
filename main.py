@@ -1,4 +1,12 @@
-#!/usr/bin/env python3
+#!/usr/bin/env -S uv run
+# /// script
+# requires-python = ">=3.12"
+# dependencies = [
+#     "langchain-core>=1.2.14",
+#     "langchain-ollama>=1.0.1",
+#     "langgraph>=1.0.9",
+# ]
+# ///
 """ai - カレントディレクトリで動くAIアシスタント"""
 import os
 import subprocess
